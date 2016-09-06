@@ -1,0 +1,90 @@
+# Makefile for IOIni
+
+IOIni_SWIFTC_FLAGS = $(DEBUG) $($(OS)_EXTRA_FLAGS) \
+	-module-cache-path $(MODULE_CACHE_PATH)/IOIni -module-name IOIni $($(OS)_SWIFTC_FLAGS)
+
+IOIni_Src = Error.swift parseINI.swift
+IOIni_Src_Path = $(addprefix $(PACKAGE_ROOT_DIR)/IOIni/IOIni/, $(IOIni_Src))
+IOIni_Obj = $(addsuffix .o, $(basename $(IOIni_Src_Path)))
+IOIni_Modules = $(addprefix $(MODULE_CACHE_PATH)/IOIni/, $(addsuffix .swiftmodule, $(basename $(IOIni_Src))))
+
+IOIni_Darwin_SHLIB_PATH = -target x86_64-apple-macosx10.10 -I$(BUILD_ROOT_DIR)/lib -I$(BUILD_ROOT_DIR)/frameworks \
+	-F$(BUILD_ROOT_DIR)/frameworks -L$(BUILD_ROOT_DIR)/frameworks -L$(BUILD_ROOT_DIR)/lib -L$(SWIFT_libs)
+IOIni_Linux_SHLIB_PATH = -target x86_64--linux-gnu -L$(SWIFT_libs) \
+		-L$(shell dirname $(shell dirname $(shell which swiftc)))/lib/swift_static/linux \
+		-L$(BUILD_ROOT_DIR)/lib -I/usr/include
+IOIni_SHLIB_PATH = $(IOIni_$(OS)_SHLIB_PATH)
+
+IOIni_Darwin_LFLAGS = $(IOIni_SHLIB_PATH) -arch x86_64 -dynamiclib \
+	-isysroot $(SDK) \
+	-install_name @executable_path/../frameworks/IOIni.framework/Versions/A/IOIni \
+	-Xlinker -add_ast_path \
+	-stdlib=libc++ \
+	-Xlinker $(PACKAGE_ROOT_DIR)/IOIni/IOIni.swiftmodule -single_module \
+	-Xlinker -rpath -Xlinker @executable_path/../Frameworks \
+	-Xlinker -rpath -Xlinker @loader_path/Frameworks \
+	-Xlinker -rpath -Xlinker @executable_path/../lib \
+	-Xlinker -rpath -Xlinker @executable_path/../frameworks \
+	-compatibility_version 1 -current_version 1 \
+	-framework Foundation
+IOIni_Linux_LFLAGS = $(IOIni_SHLIB_PATH) -lswiftCore -lswiftGlibc -ldl -lFoundation -lbsd \
+	-shared -flto -fuse-ld=gold \
+	-Xlinker -export-dynamic \
+	-Xlinker --exclude-libs -Xlinker ALL \
+	-Xlinker -rpath -Xlinker '$$ORIGIN/../lib/x86_64/IOIni.swiftmodule' \
+	-Xlinker -rpath -Xlinker '$$ORIGIN/../lib' \
+	-Xlinker -rpath -Xlinker '/usr/lib64' \
+	-Xlinker -rpath -Xlinker '/usr/lib' \
+	-Xlinker -rpath -Xlinker '/usr/local/lib64' \
+	-Xlinker -rpath -Xlinker '/usr/local/lib' \
+	$(SWIFT_libs)/x86_64/swift_end.o
+IOIni_LFLAGS = $(IOIni_$(OS)_LFLAGS)
+
+IOIni-install:
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.so $(BUILD_ROOT_DIR)/lib/libIOIni.so
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.swiftmodule $(BUILD_ROOT_DIR)/lib/x86_64
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.swiftdoc $(BUILD_ROOT_DIR)/lib/x86_64
+	@chmod +x $(BUILD_ROOT_DIR)/lib/libIOIni.so
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.so $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/IOIni
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.swiftdoc $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/Modules/IOIni.swiftmodule/x86_64.swiftdoc
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.swiftmodule $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/Modules/IOIni.swiftmodule/x86_64.swiftmodule
+	@cp $(PACKAGE_ROOT_DIR)/IOIni/IOIni/module.modulemap $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/Modules
+
+IOIni-modulecache:
+	@mkdir -p $(MODULE_CACHE_PATH)/IOIni
+	@mkdir -p $(BUILD_ROOT_DIR)/frameworks/IOIni.framework
+	@mkdir -p $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions
+	@mkdir -p $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A
+	@mkdir -p $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/Modules
+	@mkdir -p $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/Headers
+	@mkdir -p $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/A/Modules/IOIni.swiftmodule
+	@ln -sf Versions/Current/Modules $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Modules
+	@ln -sf A $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Versions/Current
+	@ln -sf Versions/Current/Headers $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/Headers
+	@ln -sf Versions/Current/IOIni $(BUILD_ROOT_DIR)/frameworks/IOIni.framework/IOIni
+
+IOIni: IOIni-modulecache IOIni.so IOIni-install
+
+IOIni.so: $(IOIni_Obj) IOIni.swiftmodule
+	$(CLANG) $(IOIni_Obj) $(IOIni_LFLAGS) -o $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.so
+
+IOIni.swiftmodule:
+	$(SWIFT) -frontend $(IOIni_SWIFTC_FLAGS) -emit-module $(IOIni_Modules) -parse-as-library \
+	-emit-module-doc-path $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.swiftdoc \
+	-o $(PACKAGE_ROOT_DIR)/IOIni/IOIni/IOIni.swiftmodule
+
+IOIni-clean:
+	@rm -rf $(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.o $(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.so \
+	$(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.swiftmodule $(SOURCE_ROOT_DIR)/IOIni/*.swiftdoc \
+	$(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.d $(MODULE_CACHE_PATH)/IOIni \
+	$(BUILD_ROOT_DIR)/lib/IOIni* $(BUILD_ROOT_DIR)/lib/libIOIni* $(BUILD_ROOT_DIR)/lib/x86_64/IOIni* \
+	$(BUILD_ROOT_DIR)/frameworks/IOIni*
+	
+$(PACKAGE_ROOT_DIR)/IOIni/IOIni/%.o : $(PACKAGE_ROOT_DIR)/IOIni/IOIni/%.swift
+	$(SWIFT) -frontend -c $(subst $<,,$(IOIni_Src_Path)) -primary-file $< \
+	-emit-module-path $(MODULE_CACHE_PATH)/IOIni/$(subst .o,.swiftmodule,$(shell basename $@)) \
+	-emit-module-doc-path $(MODULE_CACHE_PATH)/IOIni/$(subst .o,.swiftdoc,$(shell basename $@)) \
+	-emit-dependencies-path $(MODULE_CACHE_PATH)/IOIni/$(subst .swift,.d,$(shell basename $<)) \
+	-emit-reference-dependencies-path $(MODULE_CACHE_PATH)/IOIni/$(subst .swift,.swiftdeps,$(shell basename $<)) \
+	$(IOIni_SWIFTC_FLAGS) \
+	-o $@
