@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE3143C71D7EF3F700717720 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE3143C61D7EF3F700717720 /* Foundation.framework */; };
 		DE8F5CDE1D7EB5F50059F017 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8F5CDA1D7EB5F50059F017 /* Error.swift */; };
 		DE8F5CE01D7EB5F50059F017 /* parseINI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8F5CDD1D7EB5F50059F017 /* parseINI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE3143C61D7EF3F700717720 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DE8F5CC91D7EB5170059F017 /* IOIni.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IOIni.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8F5CDA1D7EB5F50059F017 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		DE8F5CDC1D7EB5F50059F017 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -24,17 +26,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE3143C71D7EF3F700717720 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE3143C51D7EF3F700717720 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DE3143C61D7EF3F700717720 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DE8F5CBF1D7EB5170059F017 = {
 			isa = PBXGroup;
 			children = (
 				DE8F5CCB1D7EB5170059F017 /* IOIni */,
 				DE8F5CCA1D7EB5170059F017 /* Products */,
+				DE3143C51D7EF3F700717720 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
