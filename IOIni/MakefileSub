@@ -75,7 +75,7 @@ IOIni.swiftmodule:
 
 IOIni-clean:
 	@rm -rf $(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.o $(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.so \
-	$(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.swiftmodule $(SOURCE_ROOT_DIR)/IOIni/*.swiftdoc \
+	$(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.swiftmodule $(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.swiftdoc \
 	$(PACKAGE_ROOT_DIR)/IOIni/IOIni/*.d $(MODULE_CACHE_PATH)/IOIni \
 	$(BUILD_ROOT_DIR)/lib/IOIni* $(BUILD_ROOT_DIR)/lib/libIOIni* $(BUILD_ROOT_DIR)/lib/x86_64/IOIni* \
 	$(BUILD_ROOT_DIR)/frameworks/IOIni*
