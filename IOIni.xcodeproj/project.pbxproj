@@ -19,6 +19,12 @@
 		DE8F5CDC1D7EB5F50059F017 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		DE8F5CDD1D7EB5F50059F017 /* parseINI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = parseINI.swift; sourceTree = "<group>"; };
 		DE8F5CE31D7ECBC90059F017 /* MakefileSub */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MakefileSub; sourceTree = "<group>"; };
+		DEE3B05E1D876192000FA7F5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		DEE3B05F1D876192000FA7F5 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		DEE3B0601D876192000FA7F5 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		DEE3B0641D8761A8000FA7F5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		DEE3B0671D876226000FA7F5 /* Build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = Build.sh; path = Travis/Build.sh; sourceTree = "<group>"; };
+		DEE3B0691D876226000FA7F5 /* DownloadDocker.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = DownloadDocker.sh; path = Travis/DownloadDocker.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +50,12 @@
 		DE8F5CBF1D7EB5170059F017 = {
 			isa = PBXGroup;
 			children = (
+				DEE3B0641D8761A8000FA7F5 /* .travis.yml */,
+				DEE3B05E1D876192000FA7F5 /* README.md */,
+				DEE3B05F1D876192000FA7F5 /* LICENSE */,
+				DEE3B0601D876192000FA7F5 /* Makefile */,
 				DE8F5CCB1D7EB5170059F017 /* IOIni */,
+				DEE3B0661D876217000FA7F5 /* Travis */,
 				DE8F5CCA1D7EB5170059F017 /* Products */,
 				DE3143C51D7EF3F700717720 /* Frameworks */,
 			);
@@ -67,6 +78,15 @@
 				DE8F5CE31D7ECBC90059F017 /* MakefileSub */,
 			);
 			path = IOIni;
+			sourceTree = "<group>";
+		};
+		DEE3B0661D876217000FA7F5 /* Travis */ = {
+			isa = PBXGroup;
+			children = (
+				DEE3B0671D876226000FA7F5 /* Build.sh */,
+				DEE3B0691D876226000FA7F5 /* DownloadDocker.sh */,
+			);
+			name = Travis;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
