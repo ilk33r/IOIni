@@ -11,7 +11,7 @@ if [[ $TRAVIS_IMAGE == 'Docker' ]]; then
 	if [[ $DOCKER_OS_RELEASE == 'Ubuntu_Trusty' ]]; then
 		SWIFT_PATH='/usr/local/swift/swift-3.0-GM-CANDIDATE-ubuntu14.04/usr/bin'
 	elif [[ $DOCKER_OS_RELEASE == 'Ubuntu_Wily' ]]; then
-		SWIFT_PATH='/usr/local/swift/swift-3.0-PREVIEW-6-ubuntu15.10/usr/bin'
+		SWIFT_PATH='/usr/local/swift/swift-3.0-GM-CANDIDATE-ubuntu15.10/usr/bin'
 	else
 		SWIFT_PATH='/usr/local/swift/bin'
 	fi
